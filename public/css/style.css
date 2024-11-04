@@ -1,0 +1,149 @@
+/* Reiniciar márgenes y establecer box-sizing */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+}
+
+/* Establecer el fondo y centrar el contenedor principal */
+body, html {
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #f0f0f0;
+}
+
+/* Contenedor principal de la interfaz */
+.container {
+    display: flex;
+    width: 800px;
+    height: 450px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    border-radius: 10px;
+    overflow: hidden;
+    background-color: white;
+}
+
+/* Estilos de la sección izquierda */
+.left-section {
+    width: 50%;
+    background-color: #b1c7ed;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    color: #1c3a5a;
+    text-align: center;
+}
+
+/* Logo de la empresa */
+.left-section .logo img {
+    width: 40px;
+    margin-bottom: 10px;
+}
+
+.left-section .logo h1 {
+    font-size: 20px;
+    font-weight: bold;
+}
+
+/* Imagen dentro de la sección izquierda */
+.left-section .image img {
+    width: 100%;
+    max-height: 200px;
+    object-fit: cover;
+    border-radius: 8px;
+}
+
+/* Estilos de la sección derecha */
+.right-section {
+    width: 50%;
+    padding: 40px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    color: #1c3a5a;
+}
+
+/* Título de bienvenida */
+.right-section h2 {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+
+/* Estilos del formulario */
+form {
+    display: flex;
+    flex-direction: column;
+}
+
+input[type="email"], input[type="password"] {
+    width: 100%;
+    padding: 12px;
+    margin: 10px 0;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+    color: #333;
+}
+
+/* Contenedor de la contraseña */
+.password-container {
+    position: relative;
+}
+
+.password-container input[type="password"] {
+    padding-right: 35px;
+}
+
+.password-container .show-password {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+    font-size: 18px;
+    color: #666;
+}
+
+/* Botón de inicio de sesión */
+button {
+    padding: 12px;
+    background-color: #5a72c0;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    margin-top: 20px;
+    transition: background-color 0.3s;
+}
+
+button:hover {
+    background-color: #4d61a6;
+}
+
+/* Enlaces de recordar contraseña y registro */
+.links {
+    margin-top: 15px;
+    font-size: 14px;
+    text-align: center;
+}
+
+.links a {
+    color: #5a72c0;
+    text-decoration: none;
+}
+
+.links a:hover {
+    text-decoration: underline;
+}
+
+/* Estilo para el texto de registro */
+.links p {
+    margin-top: 10px;
+}
