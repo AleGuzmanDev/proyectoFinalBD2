@@ -1,44 +1,54 @@
-<!-- login.php -->
-<?php 
-// Incluimos la conexión a la base de datos
+<?php
 include("../config/database.php");
+session_start();
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    // Recibimos los datos del formulario
-    $nombre_usuario = $_POST['nombre_usuario'];
+    $nombre_usuario = trim($_POST['nombre_usuario']);
     $contrasena = $_POST['contrasena'];
 
-    // Verificar las credenciales
-    $sql = "SELECT * FROM USUARIO WHERE NOMBRE_USUARIO = :nombre_usuario";
-    $stmt = oci_parse($conn, $sql);
-    oci_bind_by_name($stmt, ':nombre_usuario', $nombre_usuario);
+    try {
+        if (!$conn) {
+            die("Error al conectar con la base de datos. Verifique su configuración.");
+        }
 
-    oci_execute($stmt);
-    $usuario = oci_fetch_assoc($stmt);
+        // Preparar la llamada a la función
+        $sql = "BEGIN :resultado := validar_usuario(:nombre_usuario, :contrasena); END;";
+        $stmt = oci_parse($conn, $sql);
 
-    // Si el usuario existe y la contraseña es correcta
-    if ($usuario && password_verify($contrasena, $usuario['CONTRASENA'])) {
-        // Crear una sesión
-        session_start();
-        $_SESSION['usuario_id'] = $usuario['ID_USUARIO'];
-        $_SESSION['nombre_usuario'] = $usuario['NOMBRE_USUARIO'];
+        // Variable para capturar el resultado de la función
+        $resultado = null;
 
-        // Redirigir a la página principal
-        header("Location: index.php");
-        exit;
-    } else {
-        $error = "Nombre de usuario o contraseña incorrectos";
+        // Vincular los parámetros
+        oci_bind_by_name($stmt, ':nombre_usuario', $nombre_usuario);
+        oci_bind_by_name($stmt, ':contrasena', $contrasena);
+        oci_bind_by_name($stmt, ':resultado', $resultado, 32);
+
+        // Ejecutar la función
+        oci_execute($stmt);
+
+        // Manejar el resultado
+        if ($resultado == 1) {
+            $_SESSION['usuario'] = $nombre_usuario;     
+            header("Location: bienvenido.php");
+            exit;
+        } elseif ($resultado == 0) {
+            $error = "Usuario o contraseña incorrecta.";
+        } else {
+            $error = "Error inesperado. Intente más tarde.";
+        }
+    } catch (Exception $e) {
+        error_log("Error al iniciar sesión: " . $e->getMessage());
+        $error = "Ocurrió un error. Intenta de nuevo más tarde.";
     }
 }
 ?>
-
 <!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Iniciar sesión</title>
-    <link rel="stylesheet" href="../../public/style.css">
+    <link rel="stylesheet" href="../public/css/login.css">
 </head>
 <body>
     <div class="container">
@@ -48,11 +58,16 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 <h2>MM Enterprise</h2>
             </div>
             <h3>Iniciar sesión</h3>
-            <form>
-                <input type="email" placeholder="Correo electrónico" required>
-                <input type="password" placeholder="Contraseña" required>
+            <form method="POST" action="login.php"> <!-- Aseguramos que se use POST -->
+                <input type="text" name="nombre_usuario" placeholder="Nombre de usuario" required>
+                <input type="password" name="contrasena" placeholder="Contraseña" required>
                 <button type="submit">Iniciar sesión</button>
             </form>
+            <br>
+            <!-- Mensaje de error, si existe -->
+            <?php if (isset($error)): ?>
+                <p class="error-message"><?= htmlspecialchars($error) ?></p>
+            <?php endif; ?>
         </div>
     </div>
 </body>

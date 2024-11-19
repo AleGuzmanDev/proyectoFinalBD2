@@ -24,7 +24,7 @@ try {
     }
 
     // Mensaje opcional de éxito
-    echo "Conexión exitosa a la base de datos Oracle.";
+    // echo "Conexión exitosa a la base de datos Oracle.";
 
     // Código adicional para interactuar con la base de datos...
 } catch (Exception $e) {
@@ -32,10 +32,5 @@ try {
     echo "Error al conectar con Oracle: " . $e->getMessage();
     error_log("Error de conexión: " . $e->getMessage()); // Registro de errores
     exit;
-} finally {
-    // Liberar recursos
-    if ($conn) {
-        oci_close($conn);
-    }
 }
 ?>
