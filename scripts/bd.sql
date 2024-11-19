@@ -156,3 +156,19 @@ CREATE TABLE "INVENTARIO"
     CONSTRAINT "FK_PRODUCTO" FOREIGN KEY ("ID_PRODUCTO")               -- Clave foránea
         REFERENCES "PRODUCTO" ("ID_PRODUCTO")                         -- Referencia a la tabla PRODUCTO
 )TABLESPACE productos_tbs;
+
+
+-------------------------------------------------------
+--  DDL for Table INVENTARIO
+--------------------------------------------------------
+CREATE TABLE Venta_Producto (
+    id_venta_producto NUMBER PRIMARY KEY,  -- ID manual
+    id_venta NUMBER NOT NULL,
+    id_producto NUMBER NOT NULL,
+    cantidad NUMBER NOT NULL,
+    precio_venta NUMBER(10, 2) NOT NULL,
+    CONSTRAINT fk_vp_venta FOREIGN KEY (id_venta) REFERENCES Venta(id_venta),
+    CONSTRAINT fk_vp_producto FOREIGN KEY (id_producto) REFERENCES Producto(id_producto)
+) 
+TABLESPACE ventas_tbs;
+
