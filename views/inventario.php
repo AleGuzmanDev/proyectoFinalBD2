@@ -119,7 +119,7 @@
         </svg>
 
         <div class="button-container">
-            <button class="button">Ver inventario</button>
+            <button class="button"><a href="inventario_show.php">Ver inventario</a></button>
             <button class="button">Actualizar inventario</button>
         </div>
     </div>
