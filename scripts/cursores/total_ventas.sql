@@ -18,4 +18,3 @@ BEGIN
    
    DBMS_OUTPUT.PUT_LINE('Total ventas final: $' || v_total_ventas);
 END;
-/

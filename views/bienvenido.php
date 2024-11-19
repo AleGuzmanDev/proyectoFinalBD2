@@ -13,7 +13,7 @@
         MM Enterprise
         </div>
         <a href="ventas.php" class="menu-item">Ventas</a>
-        <a href="afiliaciones.php" class="menu-item">Afiliaciones</a>
+        <a href="afiliados.php" class="menu-item">Afiliaciones</a>
         <a href="inventario.php" class="menu-item">Inventario</a>
         <a href="despachos.php" class="menu-item">Despachos</a>
         <a href="productos.php" class="menu-item">Productos</a>

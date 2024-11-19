@@ -84,25 +84,24 @@
 <body>
     <div class="container">
         <div class="header">
-            <img src="logo.png" alt="MM Enterprise" class="logo">
             <h1 class="title">Ventas</h1>
         </div>
 
-        <div class="select-container">
+        <!-- <div class="select-container">
             <select>
-                <option value="">Domingo, 31 de octubre</option>
+                <option value="">Domingo, 31 de octubre</option> -->
                 <!-- Más opciones aquí -->
-            </select>
+            <!-- </select>
 
             <select>
-                <option value="">2024</option>
+                <option value="">2024</option> -->
                 <!-- Más opciones aquí -->
-            </select>
-        </div>
+            <!-- </select>
+        </div> -->
 
-        <button class="button">Reporte general</button>
-        <button class="button">Reporte por vendedor</button>
-        <button class="button">Comisiones</button>
+        <button class="button"> <a href="reporte_general.php">Reporte general</a></button>
+        <button class="button"> <a href="reporte_vendedor.php">Reporte por vendedor</a></button>
+        <!-- <button class="button">Comisiones</button> -->
     </div>
 </body>
 </html>

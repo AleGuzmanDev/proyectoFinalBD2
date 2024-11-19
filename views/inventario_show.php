@@ -1,127 +1,110 @@
+<?php
+// Configuración de conexión a la base de datos
+include("../config/database.php");
+
+if (!$conn) {
+    $e = oci_error();
+    echo "Error al conectar: " . $e['message'];
+    exit;
+}
+
+// Verificar si se ha pasado un ID_INVENTARIO para eliminar
+if (isset($_GET['id'])) {
+    $id_inventario = $_GET['id'];
+
+    // Preparar la llamada al procedimiento para eliminar el inventario
+    $sql = "BEGIN ELIMINAR_INVENTARIO(:id_inventario); END;";
+    $stmt = oci_parse($conn, $sql);
+
+    // Vincular el parámetro del procedimiento
+    oci_bind_by_name($stmt, ":id_inventario", $id_inventario, -1, SQLT_INT);
+
+    // Ejecutar el procedimiento
+    if (!oci_execute($stmt)) {
+        $e = oci_error($stmt);
+        echo "Error al ejecutar el procedimiento: " . $e['message'];
+        exit;
+    } else {
+        echo "<script>alert('Inventario eliminado exitosamente'); window.location='inventario_show.php';</script>";
+    }
+}
+
+// Preparar la llamada al procedimiento para mostrar inventario
+$sql = "BEGIN MOSTRAR_INVENTARIO(:cursor); END;";
+$stmt = oci_parse($conn, $sql);
+
+// Crear el cursor
+$cursor = oci_new_cursor($conn);
+
+// Vincular el cursor como parámetro de salida
+oci_bind_by_name($stmt, ":cursor", $cursor, -1, OCI_B_CURSOR);
+
+// Ejecutar el procedimiento
+if (!oci_execute($stmt)) {
+    $e = oci_error($stmt);
+    echo "Error al ejecutar el procedimiento: " . $e['message'];
+    exit;
+}
+
+// Ejecutar el cursor
+oci_execute($cursor);
+?>
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MM Enterprise - Gestión de inventario</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: Arial, sans-serif;
-        }
-
-        body {
-            background: rgb(182, 198, 238);
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 20px;
-        }
-
-        .container {
-            background: white;
-            border-radius: 10px;
-            padding: 30px;
-            width: 100%;
-            max-width: 400px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .header {
-            display: flex;
-            align-items: center;
-            margin-bottom: 40px;
-        }
-
-        .logo {
-            width: 80px;
-            margin-right: 15px;
-        }
-
-        .title {
-            font-size: 24px;
-            color: #333;
-            text-align: center;
-            width: 100%;
-        }
-
-        .gears-bg {
-            position: absolute;
-            width: 100%;
-            height: 200px;
-            bottom: 0;
-            left: 0;
-            opacity: 0.1;
-            z-index: 1;
-        }
-
-        .button-container {
-            position: relative;
-            z-index: 2;
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-            max-width: 300px;
-            margin: 0 auto;
-        }
-
-        .button {
-            width: 100%;
-            padding: 12px;
-            border: none;
-            border-radius: 20px;
-            background-color: rgb(182, 198, 238);
-            color: #333;
-            font-size: 14px;
-            cursor: pointer;
-            transition: background-color 0.3s;
-            text-align: center;
-        }
-
-        .button:hover {
-            background-color: rgb(162, 178, 218);
-        }
-    </style>
+    <title>Inventario</title>
+    <!-- Agregar Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
-    <div class="container">
-        <div class="header">
-            <img src="logo.png" alt="MM Enterprise" class="logo">
+    <div class="container mt-5">
+        <h1 class="text-primary">Inventario de Productos</h1>
+
+        <div class="mb-3">
+            <!-- Botones para agregar, editar y eliminar -->
+            <a href="agregar_inventario.php" class="btn btn-success">Agregar Inventario</a>
         </div>
 
-        <h1 class="title">Gestión de inventario</h1>
-
-        <!-- SVG para los engranajes de fondo -->
-        <svg class="gears-bg" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-            <path d="M50,25 L54,25 L55,28 L56,25 L60,25 L58,30 L62,32 L59,35 L62,38 L58,40 L60,45 L56,45 L55,42 L54,45 L50,45 L52,40 L48,38 L51,35 L48,32 L52,30 Z" fill="#333">
-                <animateTransform
-                    attributeName="transform"
-                    type="rotate"
-                    from="0 55 35"
-                    to="360 55 35"
-                    dur="10s"
-                    repeatCount="indefinite"/>
-            </path>
-            <path d="M30,45 L34,45 L35,48 L36,45 L40,45 L38,50 L42,52 L39,55 L42,58 L38,60 L40,65 L36,65 L35,62 L34,65 L30,65 L32,60 L28,58 L31,55 L28,52 L32,50 Z" fill="#333">
-                <animateTransform
-                    attributeName="transform"
-                    type="rotate"
-                    from="360 35 55"
-                    to="0 35 55"
-                    dur="10s"
-                    repeatCount="indefinite"/>
-            </path>
-        </svg>
-
-        <div class="button-container">
-            <button class="button"><a href="inventario_show.php">Ver inventario</a></button>
-            <button class="button">Actualizar inventario</button>
-        </div>
+        <table class="table table-striped table-bordered">
+            <thead class="table-primary">
+                <tr>
+                    <th>ID Inventario</th>
+                    <th>ID Producto</th>
+                    <th>Stock</th>
+                    <th>Fecha de Ingreso</th>
+                    <th>Fecha de Salida</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php while ($row = oci_fetch_assoc($cursor)): ?>
+                    <tr>
+                        <td><?= htmlspecialchars($row['ID_INVENTARIO']) ?></td>
+                        <td><?= htmlspecialchars($row['ID_PRODUCTO']) ?></td>
+                        <td><?= htmlspecialchars($row['STOCK']) ?></td>
+                        <td><?= htmlspecialchars($row['FECHA_INGRESO']) ?></td>
+                        <td><?= htmlspecialchars($row['FECHA_SALIDA']) ?></td>
+                        <td>
+                            <!-- Botón para eliminar inventario -->
+                            <a href="inventario_show.php?id=<?= htmlspecialchars($row['ID_INVENTARIO']) ?>" class="btn btn-danger btn-sm" onclick="return confirm('¿Estás seguro de eliminar este inventario?')">Eliminar</a>
+                        </td>
+                    </tr>
+                <?php endwhile; ?>
+            </tbody>
+        </table>
     </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
+
+<?php
+// Liberar recursos
+oci_free_statement($stmt);
+oci_free_statement($cursor);
+oci_close($conn);
+?>

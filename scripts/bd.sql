@@ -148,7 +148,7 @@ CREATE TABLE Producto (
 --------------------------------------------------------
 CREATE TABLE "INVENTARIO" 
 (
-    "ID_INVENTARIO" NUMBER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,  -- Generación automática de ID, siempre autoincremental
+    "ID_INVENTARIO" NUMBER PRIMARY KEY,  -- Generación automática de ID, siempre autoincremental
     "ID_PRODUCTO" NUMBER,                                             -- ID de producto, clave foránea
     "STOCK" NUMBER,                                                   -- Stock del producto
     "FECHA_INGRESO" DATE,                                             -- Fecha de ingreso
@@ -156,7 +156,7 @@ CREATE TABLE "INVENTARIO"
     CONSTRAINT "FK_PRODUCTO" FOREIGN KEY ("ID_PRODUCTO")               -- Clave foránea
         REFERENCES "PRODUCTO" ("ID_PRODUCTO")                         -- Referencia a la tabla PRODUCTO
 )TABLESPACE productos_tbs;
-
+commit;
 
 -------------------------------------------------------
 --  DDL for Table INVENTARIO

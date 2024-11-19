@@ -90,10 +90,6 @@
 </head>
 <body>
     <div class="container">
-        <div class="header">
-            <img src="logo.png" alt="MM Enterprise" class="logo">
-        </div>
-
         <h1 class="title">Gestión de inventario</h1>
 
         <!-- SVG para los engranajes de fondo -->
@@ -120,7 +116,7 @@
 
         <div class="button-container">
             <button class="button"><a href="inventario_show.php">Ver inventario</a></button>
-            <button class="button">Actualizar inventario</button>
+            <!-- <button class="button">Actualizar inventario</button> -->
         </div>
     </div>
 </body>

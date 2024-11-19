@@ -55,7 +55,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             <p class="error-message"><?= htmlspecialchars($msj) ?></p>
         <?php endif; ?>
         <div class="header">
-            <img src="logo.png" alt="MM Enterprise" class="logo">
             <h1 class="title">Afiliaciones</h1>
         </div>
 

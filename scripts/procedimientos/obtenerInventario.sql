@@ -1,0 +1,12 @@
+CREATE OR REPLACE PROCEDURE MOSTRAR_INVENTARIO(p_cursor OUT SYS_REFCURSOR) AS
+BEGIN
+    OPEN p_cursor FOR
+        SELECT 
+            ID_INVENTARIO,
+            ID_PRODUCTO,
+            STOCK,
+            FECHA_INGRESO,
+            FECHA_SALIDA
+        FROM 
+            INVENTARIO;
+END MOSTRAR_INVENTARIO;
