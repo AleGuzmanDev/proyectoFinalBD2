@@ -12,7 +12,9 @@ LOGGING
 EXTENT MANAGEMENT LOCAL
 SEGMENT SPACE MANAGEMENT AUTO;
 
--- Crear tabla afiliado
+--------------------------------------------------------
+--  DDL for Table AFILIADO
+--------------------------------------------------------
 CREATE TABLE "AFILIADO" 
 (
    "ID_AFILIADO" NUMBER PRIMARY KEY, -- Clave primaria
@@ -30,6 +32,44 @@ CREATE TABLE "AFILIADO"
 SEGMENT CREATION IMMEDIATE
 PCTFREE 10 PCTUSED 40
 TABLESPACE "VENTAS_TBS"; -- Usa un tablespace existente
+
+--------------------------------------------------------
+--  DDL for Table VENTA
+--------------------------------------------------------
+
+CREATE TABLE "VENTA" 
+(
+   "ID_VENTA" NUMBER PRIMARY KEY,     -- Clave primaria
+   "ID_AFILIADO" NUMBER NOT NULL,     -- Clave foránea hacia la tabla AFILIADO
+   "FECHA_VENTA" DATE DEFAULT SYSDATE, -- Fecha de la venta con valor predeterminado
+   "TOTAL" NUMBER(10,2) NOT NULL,     -- Monto total de la venta
+   CONSTRAINT "FK_VENTA_AFILIADO" FOREIGN KEY ("ID_AFILIADO") 
+      REFERENCES "AFILIADO" ("ID_AFILIADO") -- Clave foránea
+)
+SEGMENT CREATION IMMEDIATE
+PCTFREE 10 PCTUSED 40 
+TABLESPACE "VENTAS_TBS"; -- Usa un tablespace existente o ajusta al necesario
+
+
+--------------------------------------------------------
+--  DDL for Table COMISION
+--------------------------------------------------------
+CREATE TABLE "COMISION" 
+(
+   "ID_COMISION" NUMBER PRIMARY KEY, -- Clave primaria
+   "ID_VENTA" NUMBER NOT NULL,       -- Clave foránea hacia la tabla VENTA
+   "ID_AFILIADO" NUMBER NOT NULL,    -- Clave foránea hacia la tabla AFILIADO
+   "NIVEL_HIERARQUIA" NUMBER,        -- Nivel jerárquico del afiliado
+   "MONTO_COMISION" NUMBER(10,2),    -- Monto de la comisión
+   CONSTRAINT "FK_COMISION_VENTA" FOREIGN KEY ("ID_VENTA") 
+      REFERENCES "VENTA" ("ID_VENTA"), -- Clave foránea a la tabla VENTA
+   CONSTRAINT "FK_COMISION_AFILIADO" FOREIGN KEY ("ID_AFILIADO") 
+      REFERENCES "AFILIADO" ("ID_AFILIADO") -- Clave foránea a la tabla AFILIADO
+)
+SEGMENT CREATION IMMEDIATE
+PCTFREE 10 PCTUSED 40 
+TABLESPACE "VENTAS_TBS"; -- Usa un tablespace existente o ajusta al necesario
+
 
 
 
