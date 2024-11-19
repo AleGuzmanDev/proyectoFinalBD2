@@ -13,6 +13,24 @@ EXTENT MANAGEMENT LOCAL
 SEGMENT SPACE MANAGEMENT AUTO;
 
 --------------------------------------------------------
+--  DDL for Table CUENTA
+--------------------------------------------------------
+CREATE TABLE "CUENTA" 
+(
+   "ID_CUENTA" NUMBER PRIMARY KEY,        -- Clave primaria
+   "ID_AFILIADO" NUMBER NOT NULL,         -- Relación con afiliado
+   "USUARIO" VARCHAR2(50) UNIQUE NOT NULL, -- Nombre de usuario único
+   "CONTRASENA" VARCHAR2(255) NOT NULL,   -- Contraseña (hashed)
+   "FECHA_CREACION" DATE DEFAULT SYSDATE, -- Fecha de creación
+   "ULTIMO_ACCESO" DATE,                  -- Fecha del último acceso
+   CONSTRAINT "FK_CUENTA_AFILIADO" FOREIGN KEY ("ID_AFILIADO") 
+      REFERENCES "AFILIADO" ("ID_AFILIADO") -- Clave foránea
+)
+SEGMENT CREATION IMMEDIATE
+PCTFREE 10 PCTUSED 40
+TABLESPACE "VENTAS_TBS"; -- Usa el tablespace adecuado
+
+--------------------------------------------------------
 --  DDL for Table AFILIADO
 --------------------------------------------------------
 CREATE TABLE "AFILIADO" 
@@ -23,7 +41,7 @@ CREATE TABLE "AFILIADO"
    "TELEFONO" VARCHAR2(20), -- Teléfono opcional
    "DIRECCION" VARCHAR2(200), -- Dirección opcional
    "FECHA_AFILIACION" DATE DEFAULT SYSDATE, -- Fecha con valor predeterminado
-   "ESTADO" VARCHAR2(20) DEFAULT 'Activo' CHECK ("ESTADO" IN ('Activo', 'Inactivo', 'Suspendido')), -- Restricción CHECK
+   "ESTADO" VARCHAR2(20) DEFAULT 'Activo',
    "NIVEL_HIERARQUIA" NUMBER DEFAULT 1, -- Nivel con valor predeterminado
    "AFILIADO_SUPERIOR_ID" NUMBER, -- Clave foránea opcional
    CONSTRAINT "UNQ_EMAIL" UNIQUE ("EMAIL"), -- Clave única en el correo
